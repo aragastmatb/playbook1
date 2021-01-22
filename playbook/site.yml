@@ -76,22 +76,23 @@
     tasks:
       - name: Upload tar.gz Kibana from remote URL
         get_url:
-          url: “https://artifacts.elastic.co/downloads/kibana/kibana-{{ kibana_version }}-linux-x86_64.tar.gz”
-          dest: “/tmp/elk/kibana-{{ kibana_version }}-linux-x86_64.tar.gz”
+          url: "https://artifacts.elastic.co/downloads/kibana/kibana-{{ kibana_version }}-linux-x86_64.tar.gz"
+          dest: "/tmp/kibana-{{ kibana_version }}-linux-x86_64.tar.gz"
           mode: 5601
         tags: kibana
       - name: Create directory for Kibana
         file:
           state: directory
-          path: “{{ kibana_home }}”
+          path: "{{ kibana_home }}"
         tags: kibana
       - name: Extract Kibana in the installation directory
         become: true
         unarchive:
           copy: false
-          src: “/tmp/elk/kibana-{{ kibana_version }}-linux-x86_64.tar.gz”
-          dest: “{{ kibana_home }}”
-          creates: “{{ kibana_home }}/bin/kibana”
+          src: "/tmp/kibana-{{ kibana_version }}-linux-x86_64.tar.gz"
+          dest: "{{ kibana_home }}"
+          creates: "{{ kibana_home }}/bin/kibana"
+          extra_opts: [--strip-components=1]
         tags:
           - skip_ansible_lint
           - kibana1
